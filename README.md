@@ -1,6 +1,6 @@
 # Flamengo DB — MySQL
 
-Banco de dados relacional sobre partidas, jogadores e desempenho do Flamengo, construído em MySQL como projeto prático de estudo (Fase 1 do roadmap de Engenharia de Dados).
+Banco de dados relacional sobre partidas, jogadores e desempenho do Flamengo, construído em MySQL como projeto prático de estudo.
 
 ## 🎯 Objetivo
 
