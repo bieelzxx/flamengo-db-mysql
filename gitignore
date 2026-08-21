@@ -1,0 +1,20 @@
+# Ambiente
+.env
+*.env
+venv/
+__pycache__/
+*.pyc
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Dumps e backups locais (não versionar dados sensíveis/pesados)
+*.sql.bak
+*.dump
+/backups/
+
+# Logs
+*.log
