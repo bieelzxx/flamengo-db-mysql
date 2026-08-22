@@ -14,8 +14,9 @@ create table jogadores(
 
 create table competicoes(
 	id int primary key auto_increment,
-    nome varchar(15) not null,
-    temporada year not null
+    nome varchar(40) not null,
+    temporada year not null,
+    unique key uk_nome_temporada (nome, temporada)
 );
 
 create table adversarios(
