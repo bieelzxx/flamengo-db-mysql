@@ -59,7 +59,7 @@ flamengo-db-mysql/
 
 ## 📌 Status
 
-- [ ] Schema criado
-- [ ] Dados inseridos
+- [x] Schema criado
+- [x] Dados inseridos
 - [ ] Queries de análise escritas
 - [ ] README finalizado com exemplos
