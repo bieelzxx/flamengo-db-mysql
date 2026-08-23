@@ -1,10 +1,10 @@
 # Flamengo DB — MySQL
 
-Projeto de estudos - Banco de dados relacional sobre as últimas 5 partidas, jogadores e desempenho do Flamengo, construído em MySQL como projeto prático de estudo (Fase 1 do roadmap de Engenharia de Dados).
+Projeto de Estudos - Banco de dados relacional sobre as últimas 5 partidas, jogadores e desempenho do Flamengo, construído em MySQL.
 
 ## 🎯 Objetivo
 
-Praticar modelagem relacional (PK, FK, relacionamentos 1:N e N:N) e consultas analíticas (JOIN, agregação, GROUP BY, HAVING, CASE WHEN) sobre um domínio real.
+Praticar modelagem relacional (PK, FK, relacionamentos 1:N e N:N) e consultas (JOIN, agregação, GROUP BY, HAVING, CASE WHEN) sobre um domínio real.
 
 ## 🗂️ Estrutura
 
@@ -49,7 +49,7 @@ SELECT COUNT(*) FROM participacoes; -- 78
 
 ## 📊 Exemplo de consulta
 
-**Artilheiro do time:**
+**Artilheiro do time (nas últimas 5 partidas):**
 
 | Jogador | Gols |
 |---|---|
@@ -60,13 +60,7 @@ SELECT COUNT(*) FROM participacoes; -- 78
 
 ## 🧠 Principais decisões
 
-- Estatísticas (gols/assistências/cartões) ficam em `participacoes`, não em `jogadores` — evita dado duplicado, total sempre calculado via `SUM`.
-- `gols_flamengo`/`gols_adversario` denormalizados em `partidas` — garante o placar oficial mesmo sem granularidade individual completa (ex: gol contra).
-- `cartao` é `ENUM` nullable, sem valor `'nenhum'` — `NULL` já representa ausência de cartão.
-- `competicoes` tem `UNIQUE(nome, temporada)` composto, não em `nome` isolado — permite repetir "Brasileirão" em anos diferentes.
-- Seed limitado a 5 partidas (não as 20 disponíveis) — só essas tinham estatística individual validada em fonte primária (FBref).
-
-## 📌 Status
-
-- [x] Schema, dados e queries prontos
-- [x] README documentado
+- Estatísticas (gols/assistências/cartões) ficam em `participacoes`, não em `jogadores`, evitando dado duplicado, total sempre calculado via `SUM`.
+- `gols_flamengo`/`gols_adversario` denormalizados em `partidas`, garantindo o placar oficial mesmo sem granularidade individual completa (ex: gol contra).
+- `cartao` é `ENUM` nullable, sem valor `'nenhum'` pois o parâmetro `NULL` já representa a ausência de cartão.
+- `competicoes` tem `UNIQUE(nome, temporada)` composto, não em `nome` isolado, pois permite repetir a competição em anos diferentes.
