@@ -1,65 +1,72 @@
 # Flamengo DB — MySQL
 
-Banco de dados relacional sobre partidas, jogadores e desempenho do Flamengo, construído em MySQL como projeto prático de estudo.
+Banco de dados relacional sobre partidas, jogadores e desempenho do Flamengo, construído em MySQL como projeto prático de estudo (Fase 1 do roadmap de Engenharia de Dados).
 
 ## 🎯 Objetivo
 
-Praticar modelagem relacional (PK, FK, relacionamentos 1:N e N:N), criação de tabelas, inserção de dados e consultas analíticas (JOIN, agregação, GROUP BY, HAVING) sobre um domínio real.
+Praticar modelagem relacional (PK, FK, relacionamentos 1:N e N:N) e consultas analíticas (JOIN, agregação, GROUP BY, HAVING, CASE WHEN) sobre um domínio real.
 
-## 🗂️ Estrutura do repositório
+## 🗂️ Estrutura
 
 ```
 flamengo-db-mysql/
 ├── sql/
-│   ├── 01_schema.sql       # CREATE TABLE (estrutura do banco)
-│   ├── 02_seed.sql         # INSERT (dados de exemplo)
-│   └── 03_queries.sql      # Consultas analíticas
+│   ├── 01_schema.sql       # estrutura do banco
+│   ├── 02_seed.sql         # dados reais
+│   └── 03_queries.sql      # consultas analíticas
 ├── docs/
-│   └── der.png             # Diagrama Entidade-Relacionamento (opcional)
+│   └── der.png             # diagrama entidade-relacionamento
 └── README.md
 ```
 
 ## 🧩 Modelo de dados
 
-- **jogadores** — elenco do time
-- **competicoes** — competições disputadas (Brasileirão, Libertadores, etc.)
-- **adversarios** — times adversários
-- **partidas** — jogos, com FK para competição e adversário
-- **participacoes** — tabela associativa (N:N) entre jogadores e partidas, registrando gols e cartões
+- **jogadores** — elenco (dados fixos: nome, nascimento, posição, altura, peso)
+- **competicoes** — Brasileirão, Libertadores
+- **adversarios** — times enfrentados
+- **partidas** — jogos, com FK para competição/adversário e placar oficial
+- **participacoes** — tabela associativa N:N (jogador × partida), com gols/assistências/cartão *daquela partida*
 
-> Diagrama detalhado em `docs/der.png` (ou descreva aqui em texto se não tiver gerado a imagem ainda).
+![DER](docs/der.png)
 
 ## ▶️ Como rodar
 
-1. Criar o banco:
-   ```sql
-   CREATE DATABASE flamengo_db;
-   USE flamengo_db;
-   ```
-2. Importar a estrutura:
-   ```bash
-   mysql -u seu_usuario -p flamengo_db < sql/01_schema.sql
-   ```
-3. Popular com os dados de exemplo:
-   ```bash
-   mysql -u seu_usuario -p flamengo_db < sql/02_seed.sql
-   ```
-4. Rodar as consultas de análise:
-   ```bash
-   mysql -u seu_usuario -p flamengo_db < sql/03_queries.sql
-   ```
+```bash
+mysql -u seu_usuario -p < sql/01_schema.sql
+mysql -u seu_usuario -p flamengo_db < sql/02_seed.sql
+mysql -u seu_usuario -p flamengo_db < sql/03_queries.sql
+```
 
-## 📊 Exemplos de consulta
+Rode na ordem (01 → 02 → 03). Pra conferir se populou certo:
 
-*(preencher depois de escrever as queries — cole aqui 2-3 exemplos com o resultado, tipo "artilheiro do time" ou "aproveitamento por competição")*
+```sql
+SELECT COUNT(*) FROM jogadores;     -- 23
+SELECT COUNT(*) FROM partidas;      -- 5
+SELECT COUNT(*) FROM participacoes; -- 78
+```
 
-## 🧠 Decisões tomadas
+*(usando MySQL Workbench ou outra GUI: abra cada arquivo na ordem e execute o conteúdo)*
 
-*(explique brevemente escolhas de modelagem — por que criou a tabela associativa, por que certos campos são NOT NULL, etc. Isso mostra raciocínio, não só código)*
+## 📊 Exemplo de consulta
+
+**Artilheiro do time:**
+
+| Jogador | Gols |
+|---|---|
+| Samuel Lino | 3 |
+| Pedro | 2 |
+
+*(as outras 6 consultas — aproveitamento, cartões, mandante x visitante, etc. — estão em `sql/03_queries.sql`)*
+
+## 🧠 Principais decisões
+
+- Estatísticas (gols/assistências/cartões) ficam em `participacoes`, não em `jogadores` — evita dado duplicado, total sempre calculado via `SUM`.
+- `gols_flamengo`/`gols_adversario` denormalizados em `partidas` — garante o placar oficial mesmo sem granularidade individual completa (ex: gol contra).
+- `cartao` é `ENUM` nullable, sem valor `'nenhum'` — `NULL` já representa ausência de cartão.
+- `competicoes` tem `UNIQUE(nome, temporada)` composto, não em `nome` isolado — permite repetir "Brasileirão" em anos diferentes.
+- Seed limitado a 5 partidas (não as 20 disponíveis) — só essas tinham estatística individual validada em fonte primária (FBref).
 
 ## 📌 Status
 
-- [x] Schema criado
-- [x] Dados inseridos
-- [ ] Queries de análise escritas
-- [ ] README finalizado com exemplos
+- [x] Schema, dados e queries prontos
+- [x] README documentado
