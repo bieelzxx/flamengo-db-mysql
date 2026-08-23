@@ -29,6 +29,12 @@ flamengo-db-mysql/
 
 ![DER](docs/der.png)
 
+## 🛠️ Tecnologias utilizadas
+ 
+- **MySQL** — banco de dados relacional
+- **MySQL Workbench** — modelagem, execução das queries e geração do DER
+- **FBref** — fonte utilizada para extração dos dados (partidas, jogadores etc)
+
 ## ▶️ Como rodar
 
 ```bash
